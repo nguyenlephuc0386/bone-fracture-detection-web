@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hệ Thống Nhận Dạng Gãy Xương từ ảnh X-quang sử dụng AI. Đồ án huấn luyện mô hình máy học bằng YOLO.">
+    <title>Hệ Thống Nhận Dạng Gãy Xương | AI X-Ray Analysis</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-bone"></i>
+                <span>FractureScan AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="#detection" class="nav-link">Nhận Diện</a>
+                <a href="#history" class="nav-link">Lịch Sử</a>
+                <a href="#contact" class="nav-link">Liên Hệ</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#detection" class="mobile-link">Nhận Diện</a>
+        <a href="#history" class="mobile-link">Lịch Sử</a>
+        <a href="#contact" class="mobile-link">Liên Hệ</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Hệ Thống Phân Tích X-Quang Bằng AI</h1>
+            <p>Nhận dạng và định vị các loại gãy xương với độ chính xác cao nhờ sức mạnh của mô hình YOLO.</p>
+            <a href="#detection" class="btn btn-primary">Bắt Đầu Nhận Diện</a>
+        </div>
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Section 1: Nhận Diện -->
+    <section id="detection" class="section">
+        <div class="container">
+            <h2 class="section-title">Nhận Diện Gãy Xương</h2>
+            <p class="section-subtitle">Tải lên ảnh X-quang để hệ thống phân tích tự động</p>
+            
+            <div class="upload-container" id="upload-container">
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-content">
+                        <div class="upload-icon-wrapper">
+                            <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        </div>
+                        <h3>Kéo thả ảnh vào đây</h3>
+                        <p>hoặc</p>
+                        <input type="file" id="file-input" accept=".png,.dcm,.dicom" hidden>
+                        <button class="btn btn-outline" id="browse-btn">Chọn tệp từ máy tính</button>
+                        <p class="upload-hint">Hỗ trợ các định dạng: PNG, DICOM (.dcm) — Tối đa 50MB</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Area -->
+            <div class="result-section" id="result-section" style="display: none;">
+                <div class="result-header">
+                    <h3>Kết quả phân tích</h3>
+                    <div class="result-actions">
+                        <button class="btn btn-outline btn-sm" id="new-analysis-btn">
+                            <i class="fa-solid fa-rotate-right"></i> Phân tích mới
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="result-container">
+                    <div class="image-comparison">
+                        <div class="image-box">
+                            <h4>Ảnh gốc</h4>
+                            <img id="original-image" src="" alt="Original X-ray">
+                        </div>
+                        <div class="image-box">
+                            <h4>Kết quả nhận diện</h4>
+                            <img id="result-image" src="" alt="Analyzed X-ray">
+                        </div>
+                    </div>
+                    
+                    <div class="detection-summary">
+                        <div id="healthy-message" class="healthy-message" style="display: none;">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <h4>Không phát hiện gãy xương</h4>
+                            <p>Ảnh X-quang cho thấy cấu trúc xương bình thường.</p>
+                        </div>
+                        
+                        <div class="summary-header">
+                            <h4>Chi tiết phát hiện</h4>
+                            <span class="total-badge" id="total-detections">0</span>
+                        </div>
+                        <div class="detection-list" id="detection-list">
+                            <!-- Detection cards will be inserted here -->
+                        </div>
+                        
+                        <div class="download-actions" id="download-actions">
+                            <button class="btn btn-download" id="download-png-btn">
+                                <i class="fa-solid fa-download"></i> Tải PNG
+                            </button>
+                            <button class="btn btn-download" id="download-dicom-btn">
+                                <i class="fa-solid fa-file-medical"></i> Tải DICOM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Lịch Sử -->
+    <section id="history" class="section bg-alt">
+        <div class="container">
+            <h2 class="section-title">Lịch Sử Phân Tích</h2>
+            <p class="section-subtitle">Xem lại các kết quả đã được xử lý</p>
+            
+            <div id="history-grid" class="history-grid">
+                <!-- History cards will be rendered here -->
+            </div>
+            
+            <div id="history-empty" class="empty-state" style="display: none;">
+                <i class="fa-solid fa-folder-open"></i>
+                <p>Chưa có lịch sử phân tích nào.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Liên Hệ -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Liên Hệ & Hỗ Trợ</h2>
+            <p class="section-subtitle">Mạng lưới bệnh viện và bác sĩ chuyên khoa</p>
+            
+            <div class="contact-tabs">
+                <button class="tab-btn active" data-target="hospitals">Bệnh Viện</button>
+                <button class="tab-btn" data-target="doctors">Bác Sĩ</button>
+            </div>
+            
+            <div class="contact-content" id="hospitals-content">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="card-icon"><i class="fa-regular fa-hospital"></i></div>
+                        <h3>Bệnh viện Chợ Rẫy</h3>
+                        <p class="specialty">Chuyên khoa: Chấn thương chỉnh hình</p>
+                        <ul>
+                            <li><i class="fa-solid fa-location-dot"></i> 201B Nguyễn Chí Thanh, Q.5, TP.HCM</li>
+                            <li><i class="fa-solid fa-phone"></i> <a href="tel:02838554137">(028) 3855 4137</a></li>
+                            <li><i class="fa-solid fa-envelope"></i> <a href="mailto:chopray@choray.vn">chopray@choray.vn</a></li>
+                        </ul>
+                    </div>
+                    <div class="contact-card">
+                        <div class="card-icon"><i class="fa-regular fa-hospital"></i></div>
+                        <h3>Bệnh viện Bạch Mai</h3>
+                        <p class="specialty">Chuyên khoa: Chẩn đoán hình ảnh</p>
+                        <ul>
+                            <li><i class="fa-solid fa-location-dot"></i> 78 Giải Phóng, Đống Đa, Hà Nội</li>
+                            <li><i class="fa-solid fa-phone"></i> <a href="tel:02438693731">(024) 3869 3731</a></li>
+                            <li><i class="fa-solid fa-envelope"></i> <a href="mailto:info@bachmai.gov.vn">info@bachmai.gov.vn</a></li>
+                        </ul>
+                    </div>
+                    <div class="contact-card">
+                        <div class="card-icon"><i class="fa-regular fa-hospital"></i></div>
+                        <h3>Bệnh viện Đại học Y Dược</h3>
+                        <p class="specialty">Chuyên khoa: Cơ xương khớp</p>
+                        <ul>
+                            <li><i class="fa-solid fa-location-dot"></i> 215 Hồng Bàng, Q.5, TP.HCM</li>
+                            <li><i class="fa-solid fa-phone"></i> <a href="tel:02838554269">(028) 3855 4269</a></li>
+                            <li><i class="fa-solid fa-envelope"></i> <a href="mailto:info@umc.edu.vn">info@umc.edu.vn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-content" id="doctors-content" style="display: none;">
+                <div class="contact-grid">
+                    <div class="contact-card doctor-card">
+                        <div class="card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <h3>PGS.TS.BS Nguyễn Văn An</h3>
+                        <p class="specialty">Chấn thương chỉnh hình</p>
+                        <span class="experience">20 năm kinh nghiệm</span>
+                        <p class="workplace">BV Chợ Rẫy</p>
+                        <div class="doctor-actions">
+                            <a href="tel:#" class="btn-icon"><i class="fa-solid fa-phone"></i></a>
+                            <a href="mailto:#" class="btn-icon"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-card doctor-card">
+                        <div class="card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <h3>TS.BS Trần Thị Bình</h3>
+                        <p class="specialty">Chẩn đoán hình ảnh</p>
+                        <span class="experience">15 năm kinh nghiệm</span>
+                        <p class="workplace">BV Bạch Mai</p>
+                        <div class="doctor-actions">
+                            <a href="tel:#" class="btn-icon"><i class="fa-solid fa-phone"></i></a>
+                            <a href="mailto:#" class="btn-icon"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="contact-card doctor-card">
+                        <div class="card-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <h3>PGS.TS.BS Lê Hoàng Cường</h3>
+                        <p class="specialty">Cơ xương khớp</p>
+                        <span class="experience">18 năm kinh nghiệm</span>
+                        <p class="workplace">BV Đại học Y Dược</p>
+                        <div class="doctor-actions">
+                            <a href="tel:#" class="btn-icon"><i class="fa-solid fa-phone"></i></a>
+                            <a href="mailto:#" class="btn-icon"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>FractureScan AI</h3>
+                <p>Đồ án: Huấn luyện mô hình máy học nhận dạng gãy xương từ ảnh X-quang bằng YOLO</p>
+            </div>
+            <div class="footer-links">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 FractureScan AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="spinner-core"></div>
+        </div>
+        <p>Đang phân tích ảnh X-quang...</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
