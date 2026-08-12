@@ -7,7 +7,7 @@ AG Test Code/
 ├── app.py                    # Server Flask (backend)
 ├── best.pt                   # Mô hình YOLO đã train
 ├── requirements.txt          # Danh sách thư viện cần cài
-├── HUONG_DAN_CHAY.md         # File hướng dẫn này
+├── README.md                 # File hướng dẫn
 ├── templates/
 │   └── index.html           # Giao diện website
 ├── static/
