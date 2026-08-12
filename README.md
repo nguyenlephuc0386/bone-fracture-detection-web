@@ -3,21 +3,21 @@
 ## Cấu Trúc Project
 
 ```
-AG Test Code/
+bone-fracture-detection-web/
 ├── app.py                    # Server Flask (backend)
 ├── best.pt                   # Mô hình YOLO đã train
 ├── requirements.txt          # Danh sách thư viện cần cài
 ├── README.md                 # File hướng dẫn
 ├── templates/
-│   └── index.html           # Giao diện website
+│   └── index.html            # Giao diện website
 ├── static/
 │   ├── css/
-│   │   └── style.css        # Giao diện CSS
+│   │   └── style.css         # Giao diện CSS
 │   └── js/
-│       └── main.js          # Logic JavaScript
+│       └── main.js           # Logic JavaScript
 ├── uploads/                  # (tự tạo) Ảnh tải lên
 ├── results/                  # (tự tạo) Ảnh kết quả
-└── fractures.db             # (tự tạo) Database SQLite
+└── fractures.db              # (tự tạo) Database SQLite
 ```
 
 ---
