@@ -41,7 +41,7 @@ bone-fracture-detection-web/
 Mở **Command Prompt** hoặc **PowerShell**, di chuyển vào thư mục project:
 
 ```bash
-cd "d:\AG Test Code"
+cd "d:\bone-fracture-detection-web"
 ```
 
 Tạo môi trường ảo:
